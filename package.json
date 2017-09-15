@@ -1,0 +1,6 @@
+{
+    "name": "andals/go-nsq-mate",
+    "dependencies": {
+        "github.com/nsqio/go-nsq": "git+https://github.com/nsqio/go-nsq.git#973bf9a2952ff7e38071ae8392b73e4418503059"
+    }
+}
