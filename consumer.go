@@ -11,7 +11,7 @@ type Consumer struct {
 	config   *Config
 	consumer *nsq.Consumer
 
-	hf           nsq.HandlerFunc
+	hf           HandlerFunc
 	msgProcessor IMessageProcessor
 	lookupdList  []string
 
@@ -35,7 +35,7 @@ func NewConsumer(topic, channel string, config *Config) (*Consumer, error) {
 	}, nil
 }
 
-func (this *Consumer) SetHandleFunc(hf nsq.HandlerFunc) *Consumer {
+func (this *Consumer) SetHandleFunc(hf HandlerFunc) *Consumer {
 	this.hf = hf
 	this.consumer.AddHandler(this)
 
@@ -61,7 +61,7 @@ func (this *Consumer) HandleMessage(message *nsq.Message) error {
 	}
 
 	message.Body = body
-	return this.hf(message)
+	return this.hf(&Message{message})
 }
 
 func (this *Consumer) Run() error {
