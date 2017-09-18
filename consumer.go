@@ -8,7 +8,7 @@ type Consumer struct {
 	topic   string
 	channel string
 
-	config   *nsq.Config
+	config   *Config
 	consumer *nsq.Consumer
 
 	hf           nsq.HandlerFunc
@@ -18,8 +18,8 @@ type Consumer struct {
 	stopCh chan bool
 }
 
-func NewConsumer(topic, channel string, config *nsq.Config) (*Consumer, error) {
-	c, err := nsq.NewConsumer(topic, channel, config)
+func NewConsumer(topic, channel string, config *Config) (*Consumer, error) {
+	c, err := nsq.NewConsumer(topic, channel, config.Config)
 	if err != nil {
 		return nil, err
 	}

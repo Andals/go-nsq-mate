@@ -6,10 +6,21 @@ import (
 	"io/ioutil"
 )
 
-type GzipMessageProcessor struct {
+type gzipMessageProcessor struct {
+	processor IMessageProcessor
 }
 
-func (this *GzipMessageProcessor) Process(msg []byte) []byte {
+func NewGzipMessageProcessor(processor IMessageProcessor) *gzipMessageProcessor {
+	if processor == nil {
+		processor = new(NoopMsgProcessor)
+	}
+
+	return &gzipMessageProcessor{processor}
+}
+
+func (this *gzipMessageProcessor) Process(msg []byte) []byte {
+	msg = this.processor.Process(msg)
+
 	b := bytes.NewBuffer([]byte{})
 	w := gzip.NewWriter(b)
 	w.Write(msg)
@@ -19,7 +30,9 @@ func (this *GzipMessageProcessor) Process(msg []byte) []byte {
 	return b.Bytes()
 }
 
-func (this *GzipMessageProcessor) MultiProcess(msgs [][]byte) [][]byte {
+func (this *gzipMessageProcessor) MultiProcess(msgs [][]byte) [][]byte {
+	msgs = this.processor.MultiProcess(msgs)
+
 	bs := make([][]byte, len(msgs))
 	for i, msg := range msgs {
 		bs[i] = this.Process(msg)
@@ -28,16 +41,22 @@ func (this *GzipMessageProcessor) MultiProcess(msgs [][]byte) [][]byte {
 	return bs
 }
 
-func (this *GzipMessageProcessor) Restore(msg []byte) ([]byte, error) {
-	b := bytes.NewReader(msg)
-	r, e := gzip.NewReader(b)
-	if e != nil {
-		return nil, e
+func (this *gzipMessageProcessor) Restore(msg []byte) ([]byte, error) {
+	var err error
+	msg, err = this.processor.Restore(msg)
+	if err != nil {
+		return nil, err
 	}
 
-	body, e := ioutil.ReadAll(r)
-	if e != nil && len(body) == 0 {
-		return nil, e
+	b := bytes.NewReader(msg)
+	r, err := gzip.NewReader(b)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := ioutil.ReadAll(r)
+	if err != nil && len(body) == 0 {
+		return nil, err
 	}
 
 	return body, nil
