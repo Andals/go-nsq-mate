@@ -6,3 +6,8 @@ type IMessageProcessor interface {
 
 	Restore(msg []byte) ([]byte, error)
 }
+
+type IMessageEndecoder interface {
+	Encode(msg []byte) ([]byte, error)
+	Decode(msg []byte) ([]byte, error)
+}
