@@ -1,6 +1,7 @@
 {
     "name": "andals/go-nsq-mate",
     "dependencies": {
-        "github.com/nsqio/go-nsq": "git+https://github.com/nsqio/go-nsq.git#973bf9a2952ff7e38071ae8392b73e4418503059"
+        "github.com/nsqio/go-nsq": "git+https://github.com/nsqio/go-nsq.git#973bf9a2952ff7e38071ae8392b73e4418503059",
+        "github.com/golang/snappy ": "git+https://github.com/golang/snappy#553a641470496b2327abcac10b36396bd98e45c9"
     }
 }
