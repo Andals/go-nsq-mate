@@ -1,3 +1,5 @@
+Move to https://github.com/goinbox/go-nsq-mate
+
 # go-nsq-mate
 
 go get -d github.com/andals/go-nsq-mate
